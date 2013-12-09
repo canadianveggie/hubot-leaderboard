@@ -4,7 +4,25 @@ hubot-leaderboard
 Hubot plugin to keep track of leaderboards
 Useful for keeping track of who has won the most King of Tokyo or Mario Kart games in the office.
 
-Usage
+## Installation
+
+### Update the files to include the hubot-leaderboard module:
+
+#### package.json
+    ...
+    "dependencies": {
+      ...
+      "hubot-leaderboard": ">= 0.1.0"
+      ...
+    },
+    ...
+
+#### external-scripts.json
+    [...,"hubot-leaderboard"]
+
+Run `npm install` to install hubot-leaderboard and dependencies.
+
+Commands
 -----
 ```
 hubot <user> climbs <event> leaderboard - Add a victory for the user
