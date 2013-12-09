@@ -1,5 +1,5 @@
 {
-  "name": "hubot-calculator",
+  "name": "hubot-leaderboard",
   "description": "Hubot script for tracking leaderboards",
   "version": "0.1.0",
   "author": "Christopher Porter <chris@pulseenergy.com>",
@@ -12,11 +12,11 @@
 
   "repository": {
     "type": "git",
-    "url": "git://github.com/canadianveggie/hubot-calculator.git"
+    "url": "git://github.com/canadianveggie/hubot-leaderboard.git"
   },
 
   "bugs": {
-    "url": "https://github.com/canadianveggie/hubot-calculator/issues"
+    "url": "https://github.com/canadianveggie/hubot-leaderboard/issues"
   },
 
   "dependencies": {
