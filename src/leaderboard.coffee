@@ -10,32 +10,44 @@
 # Commands:
 #   hubot <user> climbs <event> leaderboard - Add a victory for the user
 #   hubot set <event> leaderboard <user> <score> - Set the score for a user
-#   hubot show <event> leaderboard - Returns the event leaderboard 
-#   hubot reset <event> leaderboard - Clears the event leaderboard 
-#   hubot list leaderboards - Returns a list of leaderboards 
+#   hubot show <event> leaderboard - Returns the event leaderboard
+#   hubot reset <event> leaderboard - Clears the event leaderboard
+#   hubot list leaderboards - Returns a list of leaderboards
 #
 # Author:
 #   canadianveggie
 
 class Leaderboards
   constructor: (@robot) ->
-    @robot.brain.data.leaderboards = {}
+    this.reload()
+    @robot.brain.on 'loaded', =>
+      this.reload()
+
+  reload: ->
+    @leaderboards = @robot.brain.get('leaderboards') || @robot.brain.data.leaderboards || {}
+
+  save: ->
+    @robot.brain.set('leaderboards', @leaderboards)
+    @robot.brain.save()
 
   initialize: (event, user) ->
-    @robot.brain.data.leaderboards[event.toLowerCase()] ?= {}
-    @robot.brain.data.leaderboards[event.toLowerCase()][user.toLowerCase()] ?= {user: user, score: 0}
+    @leaderboards[event.toLowerCase()] ?= {}
+    @leaderboards[event.toLowerCase()][user.toLowerCase()] ?= {user: user, score: 0}
 
   increment: (event, user, i) ->
     this.initialize event, user
     i ?= 1
-    @robot.brain.data.leaderboards[event.toLowerCase()][user.toLowerCase()].score += i
+    @leaderboards[event.toLowerCase()][user.toLowerCase()].score += i
+    this.save()
 
   set: (event, user, val) ->
     this.initialize event, user
-    @robot.brain.data.leaderboards[event.toLowerCase()][user.toLowerCase()].score = val
+    @leaderboards[event.toLowerCase()][user.toLowerCase()].score = val
+    this.save()
 
   delete: (event) ->
-    delete @robot.brain.data.leaderboards[event.toLowerCase()]
+    delete @leaderboards[event.toLowerCase()]
+    this.save()
 
   get: (event) ->
     sortBy = (key, a, b, r) ->
@@ -44,7 +56,7 @@ class Leaderboards
       return +1*r if a[key] < b[key]
       return 0
 
-    leaderboard_values = (v for k,v of @robot.brain.data.leaderboards[event.toLowerCase()] or {})
+    leaderboard_values = (v for k,v of @leaderboards[event.toLowerCase()] or {})
 
     leaderboard_values.sort (a,b) ->
       sortBy('score', a, b, true) or
@@ -52,7 +64,7 @@ class Leaderboards
     return leaderboard_values
 
   list: ->
-    return (key for key of @robot.brain.data.leaderboards)
+    return (key for key of @leaderboards)
 
 module.exports = (robot) ->
   leaderboards = new Leaderboards robot
