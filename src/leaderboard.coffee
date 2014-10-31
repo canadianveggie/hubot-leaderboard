@@ -69,9 +69,9 @@ class Leaderboards
 module.exports = (robot) ->
   leaderboards = new Leaderboards robot
 
-  robot.respond /(.*) (climbs|rises|ascends)(up)? (.*) leaderboard/i, (msg) ->
+  robot.respond /(.*) (climbs|rises|ascends)( up)?( the)? (.*) leaderboard/i, (msg) ->
     name = msg.match[1]
-    event = msg.match[4]
+    event = msg.match[5]
     users = robot.brain.usersForFuzzyName name
     if users.length > 1
       msg.send "I found #{users.length} people named #{name}"
@@ -85,10 +85,10 @@ module.exports = (robot) ->
       else
         msg.send "We have a winner"
 
-  robot.respond /set (.*) leaderboard (.*) (\d*)/i, (msg) ->
-    event = msg.match[1]
-    name = msg.match[2]
-    score = parseInt(msg.match[3], 10)
+  robot.respond /set( the)? (.*) leaderboard (.*) (\d*)/i, (msg) ->
+    event = msg.match[2]
+    name = msg.match[3]
+    score = parseInt(msg.match[4], 10)
     users = robot.brain.usersForFuzzyName name
     if isNaN(score)
       return
@@ -102,13 +102,13 @@ module.exports = (robot) ->
       leaderboards.set event, name, score
       msg.send "#{name} has #{score} victories in #{event}"
 
-  robot.respond /reset (.*) leaderboard/i, (msg) ->
-    event = msg.match[1]
+  robot.respond /reset( the)? (.*) leaderboard/i, (msg) ->
+    event = msg.match[2]
     leaderboards.delete event
     msg.send "No more #{event} champions"
 
-  robot.respond /(show|list|get) (.*) leaderboard/i, (msg) ->
-    event = msg.match[2]
+  robot.respond /(show|list|get)( the)? (.*) leaderboard/i, (msg) ->
+    event = msg.match[3]
     leaderboard = leaderboards.get event
 
     if leaderboard.length > 0
