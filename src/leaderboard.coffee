@@ -69,6 +69,8 @@ class Leaderboards
 module.exports = (robot) ->
   leaderboards = new Leaderboards robot
 
+  String::startsWith ?= (s) -> @[...s.length] is s
+
   robot.respond /(.*) (climbs|rises|ascends)( up)?( the)? (.*) leaderboard/i, (msg) ->
     name = msg.match[1]
     event = msg.match[5]
@@ -80,7 +82,7 @@ module.exports = (robot) ->
         name = users[0].name
 
       leaderboards.increment event, name
-      if event.toLowerCase() is "king of tokyo"
+      if event.toLowerCase().startsWith "king of"
         msg.send "We have a new king"
       else
         msg.send "We have a winner"
