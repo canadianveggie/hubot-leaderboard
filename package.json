@@ -1,7 +1,7 @@
 {
   "name": "hubot-leaderboard",
   "description": "Hubot script for tracking leaderboards",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "author": "Christopher Porter <chris@pulseenergy.com>",
   "license": "MIT",
 
