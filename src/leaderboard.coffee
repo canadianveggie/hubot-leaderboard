@@ -85,10 +85,10 @@ module.exports = (robot) ->
       else
         msg.send "We have a winner"
 
-  robot.respond /set( the)? (.*) leaderboard (.*) (\d*)/i, (msg) ->
+  robot.respond /set( the)? (.*) leaderboard (.*) ([\d\.]*)/i, (msg) ->
     event = msg.match[2]
     name = msg.match[3]
-    score = parseInt(msg.match[4], 10)
+    score = parseFloat(msg.match[4], 10)
     users = robot.brain.usersForFuzzyName name
     if isNaN(score)
       return
